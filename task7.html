@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="productCatalogApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Catalog</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .product-card {
+      width: calc(33.33% - 20px);
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+    .product-card h3 {
+      margin-top: 0;
+    }
+    .filter-container {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body ng-controller="ProductCatalogController">
+  <div class="filter-container">
+    <label>Category:</label>
+    <select ng-model="selectedCategory" ng-change="filterProducts()">
+      <option value="">All</option>
+      <option ng-repeat="category in categories" value="{{ category }}">{{ category }}</option>
+    </select>
+  </div>
+
+  <div class="filter-container">
+    <label>Feature:</label>
+    <select ng-model="selectedFeature" ng-change="filterProducts()">
+      <option value="">All</option>
+      <option ng-repeat="feature in features" value="{{ feature }}">{{ feature }}</option>
+    </select>
+  </div>
+
+  <div class="product-container">
+    <div class="product-card" ng-repeat="product in filteredProducts">
+      <h3>{{ product.name }}</h3>
+      <p>Category: {{ product.category }}</p>
+      <p>Price: {{ product.price }}</p>
+      <p>Features: {{ product.features.join(', ') }}</p>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    // AngularJS App
+    var app = angular.module('productCatalogApp', []);
+
+    // Controller
+    app.controller('ProductCatalogController', function($scope) {
+      $scope.products = [
+        { name: 'Product 1', category: 'Electronics', price: 100, features: ['Feature A', 'Feature B'] },
+        { name: 'Product 2', category: 'Clothing', price: 50, features: ['Feature B', 'Feature C'] },
+        { name: 'Product 3', category: 'Electronics', price: 200, features: ['Feature A', 'Feature D'] },
+        { name: 'Product 4', category: 'Books', price: 20, features: ['Feature C', 'Feature D'] }
+      ];
+
+      // Get unique categories
+      $scope.categories = [...new Set($scope.products.map(product => product.category))];
+      
+      // Get unique features
+      $scope.features = [...new Set($scope.products.flatMap(product => product.features))];
+
+      // Filter products
+      $scope.filterProducts = function() {
+        $scope.filteredProducts = $scope.products.filter(product => {
+          return (!$scope.selectedCategory || product.category === $scope.selectedCategory) &&
+                 (!$scope.selectedFeature || product.features.includes($scope.selectedFeature));
+        });
+      };
+
+      // Initialize
+      $scope.filterProducts();
+    });
+  </script>
+</body>
+</html>
