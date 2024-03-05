@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="authApp">
+<head>
+    <meta charset="UTF-8">
+    <title>User Authentication System</title>
+    <link rel="stylesheet" href="task5.css">
+</head>
+<body>
+    <div ng-controller="AuthController as authCtrl" class="container">
+        <h1>User Authentication System</h1>
+
+        <div ng-if="!authCtrl.isLoggedIn">
+            <form ng-submit="authCtrl.signUp()">
+                <h2>Sign Up</h2>
+                <input type="text" placeholder="Username" ng-model="authCtrl.signUpData.username">
+                <input type="password" placeholder="Password" ng-model="authCtrl.signUpData.password">
+                <button type="submit">Sign Up</button>
+            </form>
+
+            <form ng-submit="authCtrl.logIn()">
+                <h2>Log In</h2>
+                <input type="text" placeholder="Username" ng-model="authCtrl.logInData.username">
+                <input type="password" placeholder="Password" ng-model="authCtrl.logInData.password">
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+
+        <div ng-if="authCtrl.isLoggedIn">
+            <h2>Welcome, {{authCtrl.currentUser.username}}!</h2>
+            <button ng-click="authCtrl.logOut()">Log Out</button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="task5.js"></script>
+</body>
+</html>
